@@ -112,7 +112,9 @@ def history():
                }
 
     for row in rows:
-        numbers = row["letters"].split(" ")
+        s = str(row["letters"])
+        numbers = s.split(" ")
+
         lis = []
 
         num = row["totaltime"]
