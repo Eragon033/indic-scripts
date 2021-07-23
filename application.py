@@ -343,7 +343,7 @@ def game():
 @login_required
 def enterdata():
     time = int(request.form.get("timer"))
-    db.execute("INSERT INTO history(user_id, totaltime, timestamp) VALUES(?, ?, CURRENT_TIMESTAMP, ?)", session["user_id"], time)
+    db.execute("INSERT INTO history(user_id, totaltime, timestamp) VALUES(?, ?, CURRENT_TIMESTAMP)", session["user_id"], time)
     return redirect("/history")
 
 # Convert time to required format
