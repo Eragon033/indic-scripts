@@ -288,7 +288,9 @@ def game():
                    }
 
         letters = []
-        global choices
+
+        db.execute("DELETE FROM tempchoices")
+
         choices = ""
 
         # letters
@@ -336,6 +338,7 @@ def game():
         elif num in range(28, 34):
             width = 75
 
+        db.execute("INSERT INTO tempchoices(options) VALUES(?)", choices)
         return render_template("/game.html", data=data, choices=choices, w=width)
 
 # Enter memory game data to database
@@ -343,7 +346,10 @@ def game():
 @login_required
 def enterdata():
     time = int(request.form.get("timer"))
-    db.execute("INSERT INTO history(user_id, totaltime, timestamp) VALUES(?, ?, CURRENT_TIMESTAMP)", session["user_id"], time)
+    rows = db.execute("SELECT options FROM tempchoices")
+    for row in rows:
+        options = row["options"]
+    db.execute("INSERT INTO history(user_id, totaltime, timestamp, letters) VALUES(?, ?, CURRENT_TIMESTAMP, ?)", session["user_id"], time, options)
     return redirect("/history")
 
 # Convert time to required format
