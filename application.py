@@ -151,7 +151,9 @@ def history():
             lis.append(letters[i])
         letter = ' '.join(lis)
 
-        timestamp = row["timestamp"].split()
+        s = str(row["timestamp"])
+        i = s.index(" ")
+        timestamp = [s[:i], s[i+1 : i+9]]
         # Date
         date = timestamp[0]
         # Time
