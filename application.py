@@ -141,7 +141,10 @@ def history():
 
     for row in rows:
         # options
-        numbers = row["letters"].split(" ")
+        s = str(row["letters"])
+        numbers = s.split(" ")
+
+        #numbers = row["letters"].split(" ")
         lis = []
 
         # time taken
