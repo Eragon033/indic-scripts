@@ -29,13 +29,13 @@ def after_request(response):
     return response
 
 # Configure session to use filesystem (instead of signed cookies)
-app.config["SESSION_FILE_DIR"] = mkdtemp()
+#app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///languages.db")
+db = SQL(os.getenv("DATABASE_URL").replace("://", "ql://", 1))
 
 @app.route("/logout")
 def logout():
@@ -123,7 +123,9 @@ def history():
             lis.append(letters[i])
         letter = ' '.join(lis)
 
-        timestamp = row["timestamp"].split()
+        s = str(row["timestamp"])
+        i = s.index(" ")
+        timestamp = [s[:i], s[i+1 : i+9]]
         # Date
         date = timestamp[0]
         # Time
