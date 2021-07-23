@@ -343,7 +343,6 @@ def game():
 @login_required
 def enterdata():
     time = int(request.form.get("timer"))
-    global choices
     db.execute("INSERT INTO history(user_id, totaltime, timestamp, letters) VALUES(?, ?, CURRENT_TIMESTAMP, ?)", session["user_id"], time, choices)
     return redirect("/history")
 
