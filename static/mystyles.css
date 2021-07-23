@@ -1,0 +1,150 @@
+.block
+{
+    display: inline-block;
+}
+
+.margin
+{
+    margin: 5px 5px;
+}
+
+img
+{
+    max-width: 100%;
+    height: auto;
+}
+
+.large
+{
+    font-size: large;
+}
+
+.center
+{
+    text-align: center;
+}
+
+.left
+{
+    text-align: left;
+    display: inline-block;
+}
+
+.bluetext
+{
+    color: blue;
+    font-family: "Trebuchet MS";
+    font-size: large;
+}
+
+.redtext
+{
+    color: red;
+    font-family: "Trebuchet MS";
+    font-size: large;
+}
+
+
+.text
+{
+    font-family: "Trebuchet MS";
+    font-size: large;
+    color: forestgreen;
+}
+
+.counter
+{
+    float: left;
+
+}
+
+.flip
+{
+    float: right;
+}
+
+.message
+{
+    font-family: "Trebuchet MS";
+    font-size: 25px;
+    color: forestgreen;
+}
+
+.finish-text
+{
+    font-family: "Trebuchet MS";
+    text-align: center;
+    font-size: 23px;
+    color: mediumseagreen;
+}
+
+.hide
+{
+    visibility: hidden;
+}
+
+.show
+{
+    visibility: visible;
+}
+
+
+/*Home*/
+
+.hh1
+{
+    color: forestgreen;
+}
+
+
+.hmargin
+{
+    margin: 10px 40px 20px;
+}
+
+
+.hpara
+{
+    line-height: 1.3;
+    color: darkgreen;
+    font-family: "Georgia";
+}
+
+.hcaption
+
+{
+    margin-top: 20px;
+    color: mediumseagreen;
+    font-family: "Trebuchet MS";
+    font-size: 20px;
+    line-height: 1.7;
+}
+
+.site-text
+{
+    margin: 20px 50px;
+    font-size: 20px;
+}
+
+
+table
+{
+    width: 100%;
+}
+
+tr
+{
+    border-top: 1px solid lightgrey;
+}
+
+/* Got this from: https://www.w3schools.com/cssref/sel_nth-child.asp */
+tr:nth-child(even)
+{
+    background-color: whitesmoke;
+}
+
+th, td
+{
+    padding: 12px;
+    text-align: left;
+}

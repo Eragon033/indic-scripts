@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+
+    <h1>Best Timings</h1>
+    <br>
+    <table>
+        <tr>
+            <th>Time Taken</th>
+            <th>Letters</th>
+            <th>Date</th>
+            <th>Time (UTC)</th>
+        </tr>
+        {% for row in lead %}
+        <tr>
+            {% for info in row %}
+            <td>{{ info }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <br><br>
+
+    <h2>History</h2>
+    <br>
+    <table>
+        <tr>
+            <th>Time Taken</th>
+            <th>Letters</th>
+            <th>Date</th>
+            <th>Time (UTC)</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            {% for info in row %}
+            <td>{{ info }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

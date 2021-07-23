@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Memory Game
+{% endblock %}
+
+{% block main %}
+
+    <form action="/game" method="post">
+        <div class="center">
+            <div class="left">
+                <p class="large">Select letters:</p>
+                <input type="checkbox" name="Letter" value="1"> ಕ ಖ ಗ ಘ ಙ<br>
+                <input type="checkbox" name="Letter" value="2"> ಚ ಛ ಜ ಝ ಞ<br>
+                <input type="checkbox" name="Letter" value="3"> ಟ ಠ ಡ ಢ ಣ<br>
+                <input type="checkbox" name="Letter" value="4"> ತ ಥ ದ ಧ ನ<br>
+                <input type="checkbox" name="Letter" value="5"> ಪ ಫ ಬ ಭ ಮ<br>
+                <input type="checkbox" name="Letter" value="6"> ಯ ರ ಲ ವ<br>
+                <input type="checkbox" name="Letter" value="7"> ಶ ಷ ಸ ಹ<br><br>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Start!</button>
+    </form>
+
+{% endblock %}

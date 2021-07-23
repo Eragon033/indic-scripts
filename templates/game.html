@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Memory Game
+{% endblock %}
+
+
+
+{% block main %}
+    <div id="text">
+        <p id="msg"></p>
+        <p id="timer" class="counter text">Time elapsed: 0 s</p>
+        <p id="flip-count" class=" flip text">No. of flips: 0</p>
+        <p  id="arrow"><span class="bluetext">Blue → Kannada</span>&emsp;&emsp;<span class="redtext">Red → Hindi</span></p>
+        <p id="msg2"></p>
+    </div>
+    <br>
+    <div id="cards">
+        {% for row in data %}
+        <div id='{{ row[0] }}' class="block margin">
+            <img id = '{{ row[1] }}' src="/static/{{ row[2] }}.jpg" alt='{{ row[1] }}' width='{{ w }}'>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+<script>
+
+    var options = {
+               "1": ["Ka", "Ka2", "Kha", "Kha2", "Ga", "Ga2", "Gha", "Gha2", "Ada", "Ada2"],
+               "2": ["Cha", "Cha2", "Chha", "Chha2", "Ja", "Ja2", "Jha", "Jha2", "Ee", "Ee2"],
+               "3": ["Ta", "Ta2", "Tha", "Tha2", "Da", "Da2", "Dha", "Dha2", "Nna", "Nna2"],
+               "4": ["Tth", "Tth2", "Thha", "Thha2", "Dda", "Dda2", "Dhha", "Dhha2", "Na", "Na2"],
+               "5": ["Pa", "Pa2", "Pha", "Pha2", "Ba", "Ba2", "Bha", "Bha2", "Ma", "Ma2"],
+               "6": ["Ya", "Ya2", "Ra", "Ra2", "La", "La2", "Va", "Va2"],
+               "7": ["Sha", "Sha2", "Shha", "Shha2", "Sa", "Sa2", "Ha", "Ha2"]
+               };
+
+    var letters = [];
+
+    var end = [];
+
+    var numbers = '{{ choices }}'.split(" ");
+
+    for (let i = 0; i < numbers.length; i++) {
+        var lis = options[numbers[i]];
+        for (let j = 0; j < lis.length; j++) {
+            letters.push(lis[j]);
+            end.push(lis[j]);
+        }
+    }
+
+    var match = {};
+    var flips = 0;
+    var flip2 = 1;
+    var seconds = 0;
+    var increment = 1;
+    var time;
+
+
+    // Got this from: https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    //
+
+    for (let i = 0; i < letters.length; i++) {
+
+        document.getElementById("card" + (i + 1)).addEventListener('click', async function () {
+            document.getElementById(letters[i]).src = "static/letters/" + letters[i] + ".png";
+            match[letters[i]] = 1;
+
+            // Determine number of flips
+            if (flip2 == 1) {
+                flips += 1;
+                flip2 = 0;
+            }
+            // Change text of number of flips
+            document.getElementById("flip-count").innerHTML = "No.of flips: " + flips;
+
+            // If two cards have been selected
+            if (Object.keys(match).length == 2) {
+                flip2 = 1;
+                flips += 1;
+                document.getElementById("flip-count").innerHTML = "No.of flips: " + flips;
+                // Disable click
+                $('#cards').css("pointer-events", "none");
+                // Compare both the cards
+                compare();
+                // Delay
+                await sleep(1300);
+                // Enable click
+                $('#cards').css("pointer-events", "auto");
+            }
+
+        });
+    }
+
+    function compare() {
+
+        const k = Object.keys(match);
+
+        var last = k[0].length - 1;
+
+        // l1 does not contain 2
+        var l1 = k[0][last] != "2" ? k[0] : k[1];
+
+        // l2 contains 2
+        var l2 = l1 == k[0] ? k[1] : k[0];
+
+        var start = l2.slice(0, -1);
+
+        // If cards match
+        if (start.startsWith(l1)) {
+
+            setTimeout(matched, 1100, l1, l2);
+
+            // Remove letters from end
+            const index1 = end.indexOf(l1);
+            end.splice(index1, 1);
+
+            const index2 = end.indexOf(l2);
+            end.splice(index2, 1);
+
+            if (end.length == 0) {
+                end_game();
+            }
+        }
+
+        // If cards do not match
+        else {
+            setTimeout(unmatched, 1100, l1, l2);
+        }
+
+        delete match[l1];
+        delete match[l2];
+
+    }
+
+    // Change text of page
+    async function end_game() {
+        var final_time = time;
+        await sleep(1100);
+        document.getElementById("cards").remove();
+        document.getElementById("arrow").remove();
+
+        var counter = document.getElementById("timer");
+        counter.innerHTML = "Total time: " + final_time;
+        counter.className = "finish-text";
+
+        var flip_no = document.getElementById("flip-count");
+        flip_no.innerHTML = "Total number of tries: " + flips;
+        flip_no.className = "finish-text";
+
+        var finish = document.getElementById("msg");
+        finish.innerHTML = "Finished!";
+        finish.className = "message";
+
+        var finish2 = document.getElementById("msg2");
+        finish2.innerHTML = "Click save game to save these stats to your history!";
+        finish2.className = "message";
+
+        // Got how to append form from: https://stackoverflow.com/questions/3991204/how-to-create-a-form-dynamically-using-javascript
+        var form_data = document.createElement('FORM');
+        form_data.method='POST';
+        form_data.action='/enterdata';
+        form_data.classList.add("center");
+
+        var timer = document.createElement('INPUT');
+        timer.type = 'TEXT';
+        timer.name= "timer";
+        timer.value = seconds;
+        form_data.appendChild(timer);
+        timer.classList.add('hide');
+        //
+
+        var exit_game = document.createElement('BUTTON');
+        exit_game.type = "submit";
+        exit_game.className = "btn btn-primary";
+        exit_game.innerHTML = "Save Game!";
+        form_data.appendChild(exit_game);
+
+        var br = document.createElement("BR");
+        form_data.insertBefore(br, exit_game);
+
+        document.getElementById("text").appendChild(form_data);
+    }
+
+    // If cards match
+    function matched(a, b) {
+        document.getElementById(a).classList.add('hide');
+        document.getElementById(b).classList.add('hide');
+    }
+
+    // If cards don't math
+    function unmatched(a, b) {
+
+        // Check whether letter is kannada or hindi to decide color of the card
+        var color1 = a.endsWith("2") ? "red" : "blue";
+        var color2 = b.endsWith("2") ? "red" : "blue";
+
+        document.getElementById(a).src = "static/" + color1 + ".jpg";
+        document.getElementById(b).src = "static/" + color2 + ".jpg";
+
+    }
+
+    if (increment == 1) {
+        // Convert time to required format
+        window.onclick = setInterval(function() {
+            if (end.length == 0) {
+                increment = 0;
+            }
+            var min;
+            var sec;
+            var hr;
+            var s;
+            seconds += increment;
+            if (seconds < 60) {
+                time = seconds + " s";
+            }
+            else if (seconds < 3600) {
+                var n = Math.floor(seconds / 60);
+                min = 60 * n;
+                sec = seconds - min;
+                time = n + " min " + sec + " s";
+            }
+            else if (seconds < 86400) {
+                var hn = Math.floor(seconds / 3600);
+                hr = 3600 * hn;
+                sec = seconds - hr;
+                var mn = Math.floor(sec / 60);
+                min = 60 * mn;
+                s = sec - min;
+                time = hn + " hr " + mn + " min " + s + " s";
+            }
+            else {
+                var dn = Math.floor(seconds / 86400);
+                time = dn + " day(s)";
+            }
+            document.getElementById("timer").innerHTML = "Time elapsed: " + time;
+        }, 1000);
+    }
+
+
+
+</script>
+
+{% endblock %}
