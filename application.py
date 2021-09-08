@@ -197,12 +197,8 @@ def register():
 
         password = request.form.get("password")
 
-        # Ensure a safe password was submitted
-        if len(password) < 8 or not (any(i.isdigit() for i in password) and any(i.isalpha() for i in password)):
-            return apology("password must follow guidelines")
-
         # Ensure confirmation was submitted
-        elif not request.form.get("confirmation"):
+        if not request.form.get("confirmation"):
             return apology ("must confirm password", 403)
 
         # Ensure password and confirmation match
@@ -240,12 +236,8 @@ def password():
 
         password = request.form.get("password")
 
-        # Ensure a safe password was submitted
-        if len(password) < 8 or not (any(i.isdigit() for i in password) and any(i.isalpha() for i in password)):
-            return apology("password must follow guidelines")
-
         # Ensure confirmation was submitted
-        elif not request.form.get("confirmation"):
+        if not request.form.get("confirmation"):
             return apology ("must confirm password", 403)
 
         # Ensure password and confirmation match
