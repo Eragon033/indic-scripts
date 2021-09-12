@@ -177,7 +177,7 @@ def history():
             lis.append(letters[i])
         letter = ' '.join(lis)
 
-        sdata.append([total_time, letter])
+        data.append([total_time, letter])
 
     count = 0
     for row in times:
