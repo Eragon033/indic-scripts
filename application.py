@@ -88,16 +88,12 @@ def login():
 def index():
     return render_template("index.html")
 
-@app.route("/varnamaala")
-@login_required
-def varnamaala():
-    return render_template("varnamaala.html")
-
 @app.route("/history")
 @login_required
 def history():
 
     rows = db.execute("SELECT * FROM history WHERE user_id = ? ORDER BY totaltime ASC LIMIT 3", session["user_id"])
+    times = db.execute("SELECT datetime(timestamp||'-05:30') as local from history where user_id = ? ORDER BY totaltime ASC LIMIT 3", session["user_id"])
 
     lead = []
 
@@ -125,19 +121,44 @@ def history():
             lis.append(letters[i])
         letter = ' '.join(lis)
 
-        s = str(row["timestamp"])
+        lead.append([total_time, letter])
+
+    count = 0
+    for row in times:
+        s = str(row["local"])
         i = s.index(" ")
         timestamp = [s[:i], s[i+1 : i+9]]
+
         # Date
         date = timestamp[0]
         # Time
         time = timestamp[1]
 
-        lead.append((total_time, letter, date, time))
+        hour = int(time[:2])
+        minutes = int(time[3:5])
+        new_hour = str(hour)
+
+        if hour == 0:
+            new_hour = "12"
+            time_suffix = "am"
+        elif hour > 12:
+            new_hour = str(hour - 12)
+            time_suffix = "pm"
+        elif hour == 12:
+            time_suffix = "pm"
+        else:
+            time_suffix = "am"
+        new_time = new_hour + time[2:] + " " + time_suffix
+
+        lead[count].append(date)
+        lead[count].append(new_time)
+        lead[count] = tuple(lead[count])
+        count += 1
 
     lead = tuple(lead)
 
     rows = db.execute("SELECT * FROM history WHERE user_id = ? ORDER BY timestamp DESC", session["user_id"])
+    times = db.execute("SELECT datetime(timestamp||'-05:30') as local from history where user_id = ? ORDER BY totaltime ASC", session["user_id"])
 
     data = []
 
@@ -156,15 +177,41 @@ def history():
             lis.append(letters[i])
         letter = ' '.join(lis)
 
-        s = str(row["timestamp"])
+        sdata.append([total_time, letter])
+
+    count = 0
+    for row in times:
+        s = str(row["local"])
         i = s.index(" ")
         timestamp = [s[:i], s[i+1 : i+9]]
+
         # Date
         date = timestamp[0]
         # Time
         time = timestamp[1]
 
-        data.append((total_time, letter, date, time))
+        hour = int(time[:2])
+        minutes = int(time[3:5])
+        new_hour = str(hour)
+
+        if hour == 0:
+            new_hour = "12"
+            time_suffix = "am"
+        elif hour > 12:
+            new_hour = str(hour - 12)
+            time_suffix = "pm"
+        elif hour == 12:
+            time_suffix = "pm"
+        else:
+            time_suffix = "am"
+        new_time = new_hour + time[2:] + " " + time_suffix
+
+        data[count].append(date)
+        data[count].append(new_time)
+        data[count] = tuple(data[count])
+        count += 1
+
+    data = tuple(data)
 
     return render_template("history.html", data=data, lead=lead)
 
@@ -337,6 +384,17 @@ def game():
 
         db.execute("INSERT INTO tempchars(user_id, options) VALUES(?, ?)", session["user_id"], choices)
         return render_template("/game.html", data=data, choices=choices, w=width)
+
+@app.route("/varnamaala")
+@login_required
+def varnamaala():
+    return render_template("varnamaala.html")
+
+
+@app.route("/culture")
+@login_required
+def culture():
+    return render_template("culture.html")
 
 # Enter memory game data to database
 @app.route("/enterdata", methods=["POST"])

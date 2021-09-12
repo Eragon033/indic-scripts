@@ -12,6 +12,7 @@ img
 {
     max-width: 100%;
     height: auto;
+    border-radius: 5px;
 }
 
 .large
@@ -147,4 +148,78 @@ th, td
 {
     padding: 12px;
     text-align: left;
+}
+
+/*Anthem page*/
+
+.column
+{
+    float: left;
+    margin: 10px;
+    width: 45%;
+}
+
+.aheading
+{
+    color: black;
+}
+
+.atext
+{
+    font-size: large;
+}
+
+.orange
+{
+    color: orange;
+}
+
+.limegreen
+{
+    color: limegreen;
+}
+
+.blue
+{
+    color: blue;
+}
+
+/*Culture of Kannada*/
+
+h2
+{
+    font-family: "Helvetica";
+    color: lightseagreen;
+}
+
+.ksitetext
+{
+    font-size: large;
+    color: dimgrey;
+    font-family: "Trebuchet MS";
+}
+
+.ktext
+{
+    font-size: large;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: "Trebuchet MS";
+    color: teal;
+}
+
+
+.kblock
+{
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.kcaption
+{
+    font-family: "Arial";
+    color: darkcyan;
+    font-size: medium;
 }
