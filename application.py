@@ -135,7 +135,6 @@ def history():
         time = timestamp[1]
 
         hour = int(time[:2])
-        minutes = int(time[3:5])
         new_hour = str(hour)
 
         if hour == 0:
@@ -148,7 +147,7 @@ def history():
             time_suffix = "pm"
         else:
             time_suffix = "am"
-        new_time = new_hour + time[2:] + " " + time_suffix
+        new_time = new_hour + time[2:5] + " " + time_suffix
 
         lead[count].append(date)
         lead[count].append(new_time)
@@ -191,7 +190,6 @@ def history():
         time = timestamp[1]
 
         hour = int(time[:2])
-        minutes = int(time[3:5])
         new_hour = str(hour)
 
         if hour == 0:
@@ -204,7 +202,7 @@ def history():
             time_suffix = "pm"
         else:
             time_suffix = "am"
-        new_time = new_hour + time[2:] + " " + time_suffix
+        new_time = new_hour + time[2:5] + " " + time_suffix
 
         data[count].append(date)
         data[count].append(new_time)
