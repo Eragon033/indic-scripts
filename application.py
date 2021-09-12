@@ -396,6 +396,11 @@ def varnamaala():
 def culture():
     return render_template("culture.html")
 
+@app.route("/anthem")
+@login_required
+def anthem():
+    return render_template("anthem.html")
+
 # Enter memory game data to database
 @app.route("/enterdata", methods=["POST"])
 @login_required
