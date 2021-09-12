@@ -158,7 +158,7 @@ def history():
     lead = tuple(lead)
 
     rows = db.execute("SELECT * FROM history WHERE user_id = ? ORDER BY timestamp DESC", session["user_id"])
-    times = db.execute("SELECT timestamp AT TIME ZONE 'utc'AT TIME ZONE '+05:30' FROM history WHERE user_id = ? ORDER BY totaltime ASC", session["user_id"])
+    times = db.execute("SELECT timestamp AT TIME ZONE 'utc'AT TIME ZONE '+05:30' AS local FROM history WHERE user_id = ? ORDER BY totaltime ASC", session["user_id"])
 
     data = []
 
