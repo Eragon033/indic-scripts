@@ -369,7 +369,7 @@ def game():
             width = 200
         elif num == 5:
             width = 190
-        elif num in range(9, 11):
+        elif num in range(8, 11):
             width = 135
         elif num in range(13, 16):
             width = 115
