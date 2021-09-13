@@ -93,7 +93,6 @@ def index():
 def history():
 
     rows = db.execute("SELECT * FROM history WHERE user_id = ? ORDER BY totaltime ASC LIMIT 3", session["user_id"])
-    times = db.execute("SELECT timestamp AT TIME ZONE 'utc'AT TIME ZONE '+05:30' AS local FROM history WHERE user_id = ? ORDER BY totaltime ASC", session["user_id"])
 
     lead = []
 
@@ -108,9 +107,7 @@ def history():
                }
 
     for row in rows:
-        s = str(row["letters"])
-        numbers = s.split(" ")
-
+        numbers = row["letters"].split(" ")
         lis = []
 
         num = row["totaltime"]
@@ -121,43 +118,22 @@ def history():
             lis.append(letters[i])
         letter = ' '.join(lis)
 
-        lead.append([total_time, letter])
-
-    count = 0
-    for row in times:
-        s = str(row["local"])
+        s = str(row["timestamp"])
         i = s.index(" ")
         timestamp = [s[:i], s[i+1 : i+9]]
-
         # Date
         date = timestamp[0]
+        dates = date.split("-")
+        dates[0], dates[2] = dates[2], dates[0]
+        date = "/".join(dates)
         # Time
-        time = timestamp[1]
+        #time = timestamp[1]
 
-        hour = int(time[:2])
-        new_hour = str(hour)
-
-        if hour == 0:
-            new_hour = "12"
-            time_suffix = "am"
-        elif hour > 12:
-            new_hour = str(hour - 12)
-            time_suffix = "pm"
-        elif hour == 12:
-            time_suffix = "pm"
-        else:
-            time_suffix = "am"
-        new_time = new_hour + time[2:5] + " " + time_suffix
-
-        lead[count].append(date)
-        lead[count].append(new_time)
-        lead[count] = tuple(lead[count])
-        count += 1
+        lead.append((total_time, letter, date))
 
     lead = tuple(lead)
 
     rows = db.execute("SELECT * FROM history WHERE user_id = ? ORDER BY timestamp DESC", session["user_id"])
-    times = db.execute("SELECT timestamp AT TIME ZONE 'utc'AT TIME ZONE '+05:30' AS local FROM history WHERE user_id = ? ORDER BY timestamp DESC", session["user_id"])
 
     data = []
 
@@ -176,40 +152,18 @@ def history():
             lis.append(letters[i])
         letter = ' '.join(lis)
 
-        data.append([total_time, letter])
-
-    count = 0
-    for row in times:
-        s = str(row["local"])
+        s = str(row["timestamp"])
         i = s.index(" ")
         timestamp = [s[:i], s[i+1 : i+9]]
-
         # Date
         date = timestamp[0]
+        dates = date.split("-")
+        dates[0], dates[2] = dates[2], dates[0]
+        date = "/".join(dates)
         # Time
-        time = timestamp[1]
+        #time = timestamp[1]
 
-        hour = int(time[:2])
-        new_hour = str(hour)
-
-        if hour == 0:
-            new_hour = "12"
-            time_suffix = "am"
-        elif hour > 12:
-            new_hour = str(hour - 12)
-            time_suffix = "pm"
-        elif hour == 12:
-            time_suffix = "pm"
-        else:
-            time_suffix = "am"
-        new_time = new_hour + time[2:5] + " " + time_suffix
-
-        data[count].append(date)
-        data[count].append(new_time)
-        data[count] = tuple(data[count])
-        count += 1
-
-    data = tuple(data)
+        data.append((total_time, letter, date))
 
     return render_template("history.html", data=data, lead=lead)
 
