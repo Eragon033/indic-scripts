@@ -1,6 +1,6 @@
 # Introduction
 
-My project is called LangLearning. It is a web application made using Flask. India has many regional languages and if we go anywhere in India, the signs are in a partiular regional language. I've made this project so that it becomes easier for Hindi-speakers to atleast read the signs and be able to navigate easily.
+My project is called Indic Scripts. It is a web application made using Flask. India has many regional languages and if we go anywhere in India, the signs are in a partiular regional language. I've made this project so that it becomes easier for Hindi-speakers to atleast read the signs and be able to navigate easily.
 
 # Technologies
 
